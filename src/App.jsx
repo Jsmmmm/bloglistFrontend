@@ -40,13 +40,19 @@ const App = () => {
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogAppUser')
+    blogService.setToken(null)
+    setUser(null)
+  }
+
   return (
     <div>
       {!user && <LoginForm onLogin={handleLogin} />}
       {user && (
         <div>
           <p>{user.name} logged in</p>
-          
+          <button onClick={handleLogout}>logout</button>
         </div>
       )}
       <h2>blogs</h2>
