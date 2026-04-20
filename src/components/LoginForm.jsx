@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = ({ onLogin }) => {
 
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    handleLogin({ username, password })
+    onLogin({ username, password })
 
     // clear fields after submit
     setUsername('')
