@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -46,6 +47,17 @@ const App = () => {
     setUser(null)
   }
 
+  const handleBlogSubmit = async ({ title, author, url }) => {
+  try {
+    const newBlog = await blogService.create({ title, author, url })
+    
+    // add the new blog to state
+    setBlogs(blogs.concat(newBlog))
+  } catch {
+    console.log('error creating new blog')
+  }
+}
+
   return (
     <div>
       {!user && <LoginForm onLogin={handleLogin} />}
@@ -53,6 +65,9 @@ const App = () => {
         <div>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
+          <div>
+            <BlogForm onCreate={handleBlogSubmit}/>
+          </div>
         </div>
       )}
       <h2>blogs</h2>
