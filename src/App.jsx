@@ -74,6 +74,19 @@ const App = () => {
   }
 }
 
+const handleBlogLike = async (blog) => {
+  try {
+    const updatedBlog = await blogService.like(blog.id)
+
+    setBlogs(blogs.map(b => 
+      b.id === blog.id ? updatedBlog : b
+    ))
+  } catch {
+    setNotification({ message: 'error liking blog', type: 'error' })
+    setTimeout(() => setNotification(null), 5000)
+  }
+}
+
   return (
     <div>
       <Notification message={notification?.message} type={notification?.type} />
@@ -91,7 +104,7 @@ const App = () => {
       )}
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} onLike={handleBlogLike} />
       )}
     </div>
   )
