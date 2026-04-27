@@ -12,7 +12,7 @@ const Blog = ({ blog, user, onLike, onDelete })  => {
   const [viewMode, setViewMode] = useState('snippet')
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div> 
         {blog.title} 
       </div>
