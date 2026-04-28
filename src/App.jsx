@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -119,9 +124,12 @@ const handleBlogDelete = async (blog) => {
           </div>
         </div>
       )}
-      <h2>blogs</h2>
-      {[...blogs].sort((a, b) => b.likes - a.likes).
-        map(blog => <Blog key={blog.id} blog={blog} user={user} onLike={handleBlogLike} onDelete={handleBlogDelete} /> )}
+      <Blogs
+        blogs={blogs}
+        user={user}
+        onLike={handleBlogLike}
+        onDelete={handleBlogDelete}
+      />
     </div>
   )
 }
