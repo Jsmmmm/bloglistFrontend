@@ -9,6 +9,7 @@ import Blogs from './components/Blogs'
 import BlogPage from './components/BlogPage'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import NewBlogPage from './components/NewBlogPage'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
@@ -107,6 +108,7 @@ const handleBlogDelete = async (blog) => {
 
     setNotification({ message: 'Blog removed', type: 'success' })
     setTimeout(() => setNotification(null), 5000)
+    navigate('/blogs')
 
   } catch {
     setNotification({ message: 'error deleting blog', type: 'error' })
@@ -124,6 +126,7 @@ const handleBlogDelete = async (blog) => {
     <div>
       <div>
         <Link style={padding} to="/blogs">Blogs</Link>
+        <Link style={padding} to="/blogs/new">New Blog</Link>
         {!user && (
           <Link style={padding} to="/login">Login</Link>
         )}
@@ -154,6 +157,12 @@ const handleBlogDelete = async (blog) => {
           />
         } />
 
+        <Route path="/blogs/new" element={
+          user 
+            ? <NewBlogPage onCreate={handleBlogSubmit} />
+            : <LoginForm onLogin={handleLogin} />
+        } />
+
       </Routes>
       <div>
         <Notification message={notification?.message} type={notification?.type} />
@@ -161,11 +170,6 @@ const handleBlogDelete = async (blog) => {
         {user && (
           <div>
             <p>{user.name} logged in</p>
-            <div>
-              <Togglable buttonLabel='new blog'>
-                <BlogForm onCreate={handleBlogSubmit}/>
-              </Togglable>
-            </div>
           </div>
         )}
       </div>
