@@ -3,8 +3,10 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Blog from './components/Blog'
 import Blogs from './components/Blogs'
+import BlogPage from './components/BlogPage'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -17,6 +19,8 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -41,6 +45,7 @@ const App = () => {
       ) 
       blogService.setToken(user.token)
       setUser(user)
+      navigate('/')
     } catch {
       setNotification({ message: 'wrong credentials', type: 'error' })
       console.log('wrong credentials')
@@ -109,27 +114,61 @@ const handleBlogDelete = async (blog) => {
   }
 }
 
+  const padding = {
+    padding: 5
+  }
+  
+  
+
   return (
     <div>
-      <Notification message={notification?.message} type={notification?.type} />
-      {!user && <LoginForm onLogin={handleLogin} />}
-      {user && (
-        <div>
-          <p>{user.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
+      <div>
+        <Link style={padding} to="/blogs">Blogs</Link>
+        {!user && (
+          <Link style={padding} to="/login">Login</Link>
+        )}
+        {user && (
+          <button style={padding} onClick={handleLogout}>Logout</button>
+        )}
+      </div>
+      <Routes>
+        <Route path="/blogs" element={
+          <Blogs 
+            blogs={blogs}
+            user={user}
+            onLike={handleBlogLike}
+            onDelete={handleBlogDelete}
+          />
+        } />
+        <Route path="/login" element={
+          <LoginForm onLogin={handleLogin}/> 
+        } />
+        <Route path="/" element={<Blogs blogs={blogs} />} />
+
+        <Route path="/blogs/:id" element={
+          <BlogPage 
+            blogs={blogs}
+            user={user}
+            onLike={handleBlogLike}
+            onDelete={handleBlogDelete}
+          />
+        } />
+
+      </Routes>
+      <div>
+        <Notification message={notification?.message} type={notification?.type} />
+        
+        {user && (
           <div>
-            <Togglable buttonLabel='new blog'>
-              <BlogForm onCreate={handleBlogSubmit}/>
-            </Togglable>
+            <p>{user.name} logged in</p>
+            <div>
+              <Togglable buttonLabel='new blog'>
+                <BlogForm onCreate={handleBlogSubmit}/>
+              </Togglable>
+            </div>
           </div>
-        </div>
-      )}
-      <Blogs
-        blogs={blogs}
-        user={user}
-        onLike={handleBlogLike}
-        onDelete={handleBlogDelete}
-      />
+        )}
+      </div>
     </div>
   )
 }

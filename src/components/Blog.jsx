@@ -1,40 +1,13 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-const Blog = ({ blog, user, onLike, onDelete })  => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  const [viewMode, setViewMode] = useState('snippet')
-
+const Blog = ({ blog }) => {
   return (
-    <div style={blogStyle} className="blog">
-      <div> 
-        {blog.title} 
-      </div>
-
-      <div style={{ display: viewMode === 'full' ? 'block' : 'none' }}>
-        Author: {blog.author} <br></br>
-        Url: {blog.url} <br></br>
-        Likes: {blog.likes} 
-        <button onClick={() => onLike(blog)}>like</button>
-        <div>
-          {user && blog.user && user.username === blog.user.username && (
-            <button onClick={() => onDelete(blog)}>remove</button>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <button
-          onClick={() => setViewMode(viewMode === 'snippet' ? 'full' : 'snippet')}>  {viewMode === 'snippet' ? 'show' : 'hide'}
-        </button>
-      </div>
-  </div>
-)}
+    <div className="blog">
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title}
+      </Link>
+    </div>
+  )
+}
 
 export default Blog
