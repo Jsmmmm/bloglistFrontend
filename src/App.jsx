@@ -150,7 +150,6 @@ const handleBlogDelete = async (blog) => {
 
         <Route path="/blogs/:id" element={
           <BlogPage 
-            blogs={blogs}
             user={user}
             onLike={handleBlogLike}
             onDelete={handleBlogDelete}

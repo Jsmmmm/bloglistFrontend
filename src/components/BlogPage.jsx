@@ -1,8 +1,14 @@
 import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import blogService from '../services/blogs'
 
-const BlogPage = ({ blogs, onLike, onDelete, user }) => {
+const BlogPage = ({ onLike, onDelete, user }) => {
   const { id } = useParams()
-  const blog = blogs.find(b => b.id === id)
+  const [blog, setBlog] = useState(null)
+  
+  useEffect(() => {
+    blogService.getById(id).then(setBlog)
+  }, [id])
 
   if (!blog) return <div>Blog not found</div>
 
