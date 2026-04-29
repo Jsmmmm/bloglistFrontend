@@ -85,16 +85,20 @@ const App = () => {
   }
 }
 
+
 const handleBlogLike = async (blog) => {
   try {
     const updatedBlog = await blogService.like(blog.id)
 
-    setBlogs(blogs.map(b => 
-      b.id === blog.id ? updatedBlog : b
-    ))
+    setBlogs(prev =>
+      prev.map(b => b.id === blog.id ? updatedBlog : b)
+    )
+
+    return updatedBlog // 👈 important
   } catch {
     setNotification({ message: 'error liking blog', type: 'error' })
     setTimeout(() => setNotification(null), 5000)
+    return null
   }
 }
 

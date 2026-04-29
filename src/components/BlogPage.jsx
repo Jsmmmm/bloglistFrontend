@@ -12,6 +12,8 @@ const BlogPage = ({ onLike, onDelete, user }) => {
 
   if (!blog) return <div>Blog not found</div>
 
+  const isOwner = user && blog.user && (user.id === blog.user.toString?.() || user.id === blog.user.id)
+
   return (
     <div>
       <h2>{blog.title}</h2>
@@ -20,12 +22,21 @@ const BlogPage = ({ onLike, onDelete, user }) => {
       <p>
         <strong>Likes:</strong> {blog.likes}
         {user && (
-            <button onClick={() => onLike(blog)}>like</button>
+            <button onClick={async () => {
+              await onLike(blog)
+              const refreshed = await blogService.getById(blog.id)
+              setBlog(refreshed)
+              console.log('TÄSÄ' + blog.user.username)
+            }}>
+              like
+            </button>
         )}
     </p>
 
-      {user && blog.user && user.username === blog.user.username && (
-        <button onClick={() => onDelete(blog)}>remove</button>
+      {isOwner && (
+        <button onClick={() => onDelete(blog)}>
+          remove
+        </button>
       )}
     </div>
   )
