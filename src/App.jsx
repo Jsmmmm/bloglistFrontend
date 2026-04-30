@@ -4,6 +4,7 @@ import {
   Routes, Route, Link
 } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { Container } from '@mui/material'
 import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import BlogPage from './components/BlogPage'
@@ -85,7 +86,6 @@ const App = () => {
   }
 }
 
-
 const handleBlogLike = async (blog) => {
   try {
     const updatedBlog = await blogService.like(blog.id)
@@ -127,56 +127,58 @@ const handleBlogDelete = async (blog) => {
   
 
   return (
-    <div>
+    <Container>
       <div>
-        <Link style={padding} to="/blogs">Blogs</Link>
-        <Link style={padding} to="/blogs/new">New Blog</Link>
-        {!user && (
-          <Link style={padding} to="/login">Login</Link>
-        )}
-        {user && (
-          <button style={padding} onClick={handleLogout}>Logout</button>
-        )}
+        <div>
+          <Link style={padding} to="/blogs">Blogs</Link>
+          <Link style={padding} to="/blogs/new">New Blog</Link>
+          {!user && (
+            <Link style={padding} to="/login">Login</Link>
+          )}
+          {user && (
+            <button style={padding} onClick={handleLogout}>Logout</button>
+          )}
+        </div>
+        <Routes>
+          <Route path="/blogs" element={
+            <Blogs 
+              blogs={blogs}
+              user={user}
+              onLike={handleBlogLike}
+              onDelete={handleBlogDelete}
+            />
+          } />
+          <Route path="/login" element={
+            <LoginForm onLogin={handleLogin}/> 
+          } />
+          <Route path="/" element={<Blogs blogs={blogs} />} />
+
+          <Route path="/blogs/:id" element={
+            <BlogPage 
+              user={user}
+              onLike={handleBlogLike}
+              onDelete={handleBlogDelete}
+            />
+          } />
+
+          <Route path="/blogs/new" element={
+            user 
+              ? <NewBlogPage onCreate={handleBlogSubmit} />
+              : <LoginForm onLogin={handleLogin} />
+          } />
+
+        </Routes>
+        <div>
+          <Notification message={notification?.message} type={notification?.type} />
+          
+          {user && (
+            <div>
+              <p>{user.name} logged in</p>
+            </div>
+          )}
+        </div>
       </div>
-      <Routes>
-        <Route path="/blogs" element={
-          <Blogs 
-            blogs={blogs}
-            user={user}
-            onLike={handleBlogLike}
-            onDelete={handleBlogDelete}
-          />
-        } />
-        <Route path="/login" element={
-          <LoginForm onLogin={handleLogin}/> 
-        } />
-        <Route path="/" element={<Blogs blogs={blogs} />} />
-
-        <Route path="/blogs/:id" element={
-          <BlogPage 
-            user={user}
-            onLike={handleBlogLike}
-            onDelete={handleBlogDelete}
-          />
-        } />
-
-        <Route path="/blogs/new" element={
-          user 
-            ? <NewBlogPage onCreate={handleBlogSubmit} />
-            : <LoginForm onLogin={handleLogin} />
-        } />
-
-      </Routes>
-      <div>
-        <Notification message={notification?.message} type={notification?.type} />
-        
-        {user && (
-          <div>
-            <p>{user.name} logged in</p>
-          </div>
-        )}
-      </div>
-    </div>
+    </Container>
   )
 }
 

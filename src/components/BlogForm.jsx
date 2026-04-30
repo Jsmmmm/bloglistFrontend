@@ -1,44 +1,65 @@
 import { useState } from 'react'
+import { TextField, Button } from '@mui/material'
 
 const BlogForm = ({ onCreate }) => {
+  const [title, setTitle] = useState('') 
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
-    const [title, setTitle] = useState('') 
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onCreate({ title, author, url })
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        onCreate({ title, author, url })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }  
 
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-    }  
-
-    return ( 
+  return ( 
+    <div>
+      <form onSubmit={handleSubmit}>
         <div>
-            <form onSubmit={handleSubmit}>
-            <div>
-                <label>
-                    title
-                    <input type="text" value={title} onChange={({ target }) => setTitle(target.value)}/>
-                </label>
-            </div>
-            <div>
-                <label>
-                    author
-                    <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)}/>
-                </label>
-            </div>
-            <div>
-                <label>
-                    url
-                    <input type="text" value={url} onChange={({ target }) => setUrl(target.value)}/>
-                </label>
-            </div>
-            <button type="submit">create</button>
-            </form>
+          <TextField
+            label="Title"
+            variant="outlined"
+            //fullWidth
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            margin="normal"
+          />
         </div>
+
+        <div>
+          <TextField
+            label="Author"
+            variant="outlined"
+            //fullWidth
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            margin="normal"
+          />
+        </div>
+
+        <div>
+          <TextField
+            label="URL"
+            variant="outlined"
+            //fullWidth
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            margin="normal"
+          />
+        </div>
+
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: 2 }}
+        >
+          create
+        </Button>
+      </form>
+    </div>
   )
 }
 
