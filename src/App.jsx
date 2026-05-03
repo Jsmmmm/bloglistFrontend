@@ -4,7 +4,7 @@ import {
   Routes, Route, Link
 } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { Container } from '@mui/material'
+import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import BlogPage from './components/BlogPage'
@@ -124,20 +124,24 @@ const handleBlogDelete = async (blog) => {
     padding: 5
   }
   
-  
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   return (
     <Container>
       <div>
         <div>
-          <Link style={padding} to="/blogs">Blogs</Link>
-          <Link style={padding} to="/blogs/new">New Blog</Link>
-          {!user && (
-            <Link style={padding} to="/login">Login</Link>
-          )}
-          {user && (
-            <button style={padding} onClick={handleLogout}>Logout</button>
-          )}
+          <AppBar position="static">
+            <Toolbar>
+              <Button color="inherit"  component={Link} to="/blogs" sx={style}>Blogs</Button>
+              <Button color="inherit"  component={Link} to="/blogs/new" sx={style}>New Blog</Button>
+              {!user && (
+                <Button color="inherit" component={Link} to="/login" sx={style}>Login</Button>
+              )}
+              {user && (
+                <button style={padding} onClick={handleLogout}>Logout</button>
+              )}
+            </Toolbar>
+          </AppBar>
         </div>
         <Routes>
           <Route path="/blogs" element={
